@@ -8,7 +8,10 @@ export default {
     extend: {
       fontFamily: {
         "main": ["Nunito Sans", "sans-serif"]
-      }
+      },
+      backgroundImage: {
+        'hero-pattern': 'var(--background-image-hero-pattern)',
+      },
     },
   },
   plugins: [],
