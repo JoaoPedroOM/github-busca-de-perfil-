@@ -48,6 +48,9 @@ const App = () => {
       setLoading(false);
     }
   };
+  const handleChange = () => {
+    setUserData(null);
+  };
 
   return (
     <main className="relative w-screen h-screen flex justify-center items-center">
@@ -84,6 +87,7 @@ const App = () => {
             {...register("usuario")}
             placeholder="Digite um usuário do Github"
             className="p-4 w-full font-main text-black rounded-lg border focus:outline-none focus:border-[#005CFF]"
+            onChange={handleChange}
           />
           <button
             className="absolute right-[2px] top-[2px] bottom-[2px] bg-[#005CFF] px-5 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
@@ -105,7 +109,7 @@ const App = () => {
           </div>
         )}
 
-        {userData && <UserDetails data={userData} />}
+        {!errors.usuario && userData && <UserDetails data={userData} />}
       </div>
     </main>
   );
