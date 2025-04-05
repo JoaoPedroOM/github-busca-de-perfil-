@@ -11,7 +11,7 @@ const UserDetails = ({ data }: { data: UserProfile }) => {
         />
       </div>
       <div className="w-full">
-        <h2 className="font-main text-[#005CFF] mb-4 text-[20px] font-bold">
+        <h2 className="font-main text-[#005CFF] md:mb-4 mb-2 text-[20px] font-bold">
           {data.name}
         </h2>
         <p className="font-main text-black sm:w-[80%] w-full sm:text-base text-sm">

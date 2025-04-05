@@ -1,7 +1,10 @@
 import { useState } from "react";
+
 import githubLogo from "./assets/img/icones/githubLogo.svg";
 import github from "./assets/img/svg/github.svg";
 import search from "./assets/img/icones/search.svg";
+import details from "./assets/img/svg/details.svg";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "@hookform/error-message";
@@ -9,9 +12,12 @@ import { buscaSchema } from "./schema/searchSchema";
 import { getUserProfile } from "./services/userService";
 import type { UserProfile } from "./types/UserProfile";
 import UserDetails from "./components/UserDetails";
+import Error from "./components/Error";
+import { PulseLoader } from "react-spinners";
 
 const App = () => {
   const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -27,6 +33,9 @@ const App = () => {
   console.log(error);
 
   const handleSearchUser = async (data: { usuario: string }) => {
+    setError(null);
+    setLoading(true);
+    setUserData(null);
     try {
       const result = await getUserProfile(data.usuario);
       setUserData(result);
@@ -35,11 +44,19 @@ const App = () => {
     } catch (err) {
       setError("Erro ao buscar o usuário. Tente novamente.");
       setUserData(null);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <main className="relative w-screen h-screen flex justify-center items-center">
+      <img
+        src={details}
+        alt="Detalhe decorativo"
+        className="absolute z-[9] pointer-events-none lg:top-14 lg:left-72 top-10 left-0"
+      />
+
       <div className="w-full h-full bg-hero-pattern bg-center bg-cover absolute z-0" />
 
       <div className="bg-black relative z-10 text-white md:p-8 px-4 pt-6 w-full max-w-6xl h-[520px] mx-4">
@@ -80,9 +97,13 @@ const App = () => {
           <ErrorMessage errors={errors} name="usuario" />
         </p>
 
-        <p className="text-base text-center mt-2 font-main font-semibold text-red-800">
-          {error && <span>{error}</span>}
-        </p>
+        {error && <Error />}
+
+        {loading && !userData && (
+          <div className="flex items-center justify-center h-[60%] mx-auto">
+            <PulseLoader color="#005CFF" speedMultiplier={0.8} />
+          </div>
+        )}
 
         {userData && <UserDetails data={userData} />}
       </div>
